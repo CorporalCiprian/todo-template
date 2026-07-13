@@ -14,12 +14,12 @@ jobs:
 
   - name: Set up Python
     uses: actions/setup-python@v3
-    with: python-version = inputs.version
+    with: python-version = ${{inputs.version}}
     if: inputs.language == 'python'
 
   - name: Set up Node
     uses: actions/setup-node@v3
-    with: node-version = inputs.version
+    with: node-version = ${{inputs.version}}
     if: inputs.language == 'node'
 
   - name: Install python dependencies
