@@ -42,9 +42,9 @@ jobs:
       if: inputs.language == 'python'
 
     - name: Run node tests
-      run: vitest run
+      run: npm test
       if: inputs.language == 'node'
 
     - name: Run vite Build
-      run: vite build
+      run: npm run build
       if: inputs.language == 'node'
