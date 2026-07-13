@@ -1,0 +1,38 @@
+name: Build template
+
+on:
+  workflow_call:
+    inputs:
+      language:
+        required: true
+        type: string
+    
+jobs:
+  runs-on: ubuntu-latest
+  steps:
+  - uses: actions/checkout@v3
+
+  - name: Set up Python
+    uses: actions/setup-python@v3
+    with: python-version = inputs.version
+    if: inputs.language == 'python'
+
+  - name: Set up Node
+    uses: actions/setup-node@v3
+    with: node-version = inputs.version
+    if: inputs.language == 'node'
+
+  - name: Install python dependencies
+    run: pip install -r requirements.txt
+
+  - name: Install node dependencies
+    run: npm install
+
+  - name: Run python tests
+    run: pytest
+
+  - name: Run node tests
+    run: vitest run
+
+  - name: Run vite Build
+    run: vite build
