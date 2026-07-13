@@ -57,4 +57,4 @@ jobs:
           git config user.name actions_worker
           git config user.email actions_worker@something.some
           git tag -a ${{steps.bump_tag.outputs.new_version}} -m "new version pushed"
-          git push
+          git push origin ${{steps.bump_tag.outputs.new_version}}
