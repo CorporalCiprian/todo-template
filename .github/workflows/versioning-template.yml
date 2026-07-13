@@ -1,0 +1,56 @@
+on:
+  workflow_call:
+    inputs:
+      branch:
+        required: true
+        type: string
+
+jobs:
+  version_and_push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: branch name validation
+        id: branch_valid
+        run: |
+          BRANCH='${{inputs.branch}}'
+          if [[ '$BRANCH' == feature/* ]]; then
+            echo "bump=minor" >> "$GITHUB_OUTPUTS"
+          elif [[ '$BRANCH' == hotfix/* || '$BRANCH' == bugfix/* ]]; then
+            echo "bump=patch" >> "$GITHUB_OUTPUTS"
+          else
+            echo "error: branch doesn't respect naming convention"
+            exit 1
+          fi
+        
+      - name: get latest tag
+        id: get_latest_tag
+        run: |
+          git fetch --tags
+          latest_tag=$(git tag -l --sort=-v:refname | head -n 1)
+          echo "tag=$latest_tag" >> "$GITHUB_OUTPUTS"
+
+      - name: bump latest tag
+        id: bump_tag
+        run: |
+          version=${{steps.get_latest_tag.outputs.tag}}
+          version=${version#v}
+          tags=IFS "." major minor patch <<< '$version'
+          if [[ ${{steps.branch_valid.outputs.bump}} == 'minor' ]]; then
+            minor=(($minor+1))
+            patch=0
+          else [[ ${{steps.branch_valid.outputs.bump}} == 'patch' ]]; then
+            patch=(($patch+1))
+          fi
+          echo "new_version=v$major.$minor.$patch" >> "$GITHUB_OUTPUTS"
+
+      - name: build and push tag
+        run: |
+          git config user.name actions_worker
+          git config user.email actions_worker@something.some
+          git tag -a ${{steps.bump_tag.outputs.new_version}} -m "new version pushed"
+          git push
