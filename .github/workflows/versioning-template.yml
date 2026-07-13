@@ -40,7 +40,7 @@ jobs:
         run: |
           version=${{steps.get_latest_tag.outputs.tag}}
           version=${version#v}
-          IFS= "." read -r major minor patch <<< '$version'
+          IFS="." read -r major minor patch <<< "$version"
           if [[ ${{steps.branch_valid.outputs.bump}} == 'minor' ]]; then
             minor=(($minor+1))
             patch=0
