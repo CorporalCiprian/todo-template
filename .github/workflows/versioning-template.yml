@@ -20,9 +20,9 @@ jobs:
         run: |
           BRANCH='${{inputs.branch}}'
           if [[ "$BRANCH" == feature/* ]]; then
-            echo "bump=minor" >> "$GITHUB_OUTPUTS"
+            echo "bump=minor" >> "$GITHUB_OUTPUT"
           elif [[ "$BRANCH" == hotfix/* || "$BRANCH" == bugfix/* ]]; then
-            echo "bump=patch" >> "$GITHUB_OUTPUTS"
+            echo "bump=patch" >> "$GITHUB_OUTPUT"
           else
             echo "error: branch doesn't respect naming convention"
             exit 1
@@ -33,7 +33,7 @@ jobs:
         run: |
           git fetch --tags
           latest_tag=$(git tag -l --sort=-v:refname | head -n 1)
-          echo "tag=$latest_tag" >> "$GITHUB_OUTPUTS"
+          echo "tag=$latest_tag" >> "$GITHUB_OUTPUT"
 
       - name: bump latest tag
         id: bump_tag
@@ -47,7 +47,7 @@ jobs:
           else [[ ${{steps.branch_valid.outputs.bump}} == 'patch' ]]; then
             patch=(($patch+1))
           fi
-          echo "new_version=v$major.$minor.$patch" >> "$GITHUB_OUTPUTS"
+          echo "new_version=v$major.$minor.$patch" >> "$GITHUB_OUTPUT"
 
       - name: build and push tag
         run: |
