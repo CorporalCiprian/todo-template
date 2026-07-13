@@ -31,15 +31,20 @@ jobs:
 
     - name: Install python dependencies
       run: pip install -r requirements.txt
+      if: inputs.language == 'python'
 
     - name: Install node dependencies
       run: npm install
+      if: inputs.language == 'node'
 
     - name: Run python tests
       run: pytest
+      if: inputs.language == 'python'
 
     - name: Run node tests
       run: vitest run
+      if: inputs.language == 'node'
 
     - name: Run vite Build
       run: vite build
+      if: inputs.language == 'node'
