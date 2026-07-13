@@ -6,9 +6,9 @@ on:
         required: true
         type: string
 
-permissions: write
-
 jobs:
+  permissions:
+    contents: write
   version_and_push:
     runs-on: ubuntu-latest
 
