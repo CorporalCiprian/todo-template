@@ -42,10 +42,10 @@ jobs:
           version=${version#v}
           IFS="." read -r major minor patch <<< "$version"
           if [[ ${{steps.branch_valid.outputs.bump}} == 'minor' ]]; then
-            minor=(($minor+1))
+            minor=$((minor+1))
             patch=0
           else [[ ${{steps.branch_valid.outputs.bump}} == 'patch' ]]; then
-            patch=(($patch+1))
+            patch=$((patch+1))
           fi
           echo "new_version=v$major.$minor.$patch" >> "$GITHUB_OUTPUT"
 
