@@ -1,9 +1,12 @@
+name: versioning template
 on:
   workflow_call:
     inputs:
       branch:
         required: true
         type: string
+
+permissions: write
 
 jobs:
   version_and_push:
