@@ -44,7 +44,7 @@ jobs:
           if [[ ${{steps.branch_valid.outputs.bump}} == 'minor' ]]; then
             minor=$((minor+1))
             patch=0
-          else [[ ${{steps.branch_valid.outputs.bump}} == 'patch' ]]; then
+          else
             patch=$((patch+1))
           fi
           echo "new_version=v$major.$minor.$patch" >> "$GITHUB_OUTPUT"
