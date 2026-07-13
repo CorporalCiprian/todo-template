@@ -15,14 +15,13 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      
       - name: branch name validation
         id: branch_valid
         run: |
           BRANCH='${{inputs.branch}}'
-          if [[ '$BRANCH' == feature/* ]]; then
+          if [[ "$BRANCH" == feature/* ]]; then
             echo "bump=minor" >> "$GITHUB_OUTPUTS"
-          elif [[ '$BRANCH' == hotfix/* || '$BRANCH' == bugfix/* ]]; then
+          elif [[ "$BRANCH" == hotfix/* || "$BRANCH" == bugfix/* ]]; then
             echo "bump=patch" >> "$GITHUB_OUTPUTS"
           else
             echo "error: branch doesn't respect naming convention"
