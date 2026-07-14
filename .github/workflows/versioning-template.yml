@@ -23,6 +23,8 @@ jobs:
             echo "bump=minor" >> "$GITHUB_OUTPUT"
           elif [[ "$BRANCH" == hotfix/* || "$BRANCH" == bugfix/* ]]; then
             echo "bump=patch" >> "$GITHUB_OUTPUT"
+          elif [[ "$BRANCH" == update/* ]]
+            echo "bump=major" >> "$GITHUB_OUTPUT"
           else
             echo "error: branch doesn't respect naming convention"
             exit 1
@@ -47,8 +49,12 @@ jobs:
           if [[ ${{steps.branch_valid.outputs.bump}} == 'minor' ]]; then
             minor=$((minor+1))
             patch=0
-          else
+          elif [[ ${{steps.branch_valid.outputs.bump}} == 'patch']]; then
             patch=$((patch+1))
+          else
+            major=$((major+1))
+            minor=0
+            patch=0
           fi
           echo "new_version=v$major.$minor.$patch" >> "$GITHUB_OUTPUT"
 
@@ -56,5 +62,5 @@ jobs:
         run: |
           git config user.name actions_worker
           git config user.email actions_worker@something.some
-          git tag -a ${{steps.bump_tag.outputs.new_version}} -m "new version pushed"
+          git tag -a ${{steps.bump_tag.outputs.new_version}} -m "bumped ${{steps.branch_valid.outputs.bump}}"
           git push origin ${{steps.bump_tag.outputs.new_version}}
