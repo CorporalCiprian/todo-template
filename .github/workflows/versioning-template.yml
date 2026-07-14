@@ -23,7 +23,7 @@ jobs:
             echo "bump=minor" >> "$GITHUB_OUTPUT"
           elif [[ "$BRANCH" == hotfix/* || "$BRANCH" == bugfix/* ]]; then
             echo "bump=patch" >> "$GITHUB_OUTPUT"
-          elif [[ "$BRANCH" == update/* ]]
+          elif [[ "$BRANCH" == update/* ]]; then
             echo "bump=major" >> "$GITHUB_OUTPUT"
           else
             echo "error: branch doesn't respect naming convention"
