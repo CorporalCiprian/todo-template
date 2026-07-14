@@ -49,7 +49,7 @@ jobs:
           if [[ ${{steps.branch_valid.outputs.bump}} == 'minor' ]]; then
             minor=$((minor+1))
             patch=0
-          elif [[ ${{steps.branch_valid.outputs.bump}} == 'patch']]; then
+          elif [[ ${{steps.branch_valid.outputs.bump}} == 'patch' ]]; then
             patch=$((patch+1))
           else
             major=$((major+1))
