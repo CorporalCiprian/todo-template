@@ -4,13 +4,17 @@ on:
       env: 
         required: true
         type: string
+      deploy:
+        required: true
+        type: boolean
+        default: false
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     environment:
       name: ${{inputs.env}}
-      deployment: false
+      deployment: ${{inputs.deploy}}
     steps:
       - name: checkout
         uses: actions/checkout@v4
