@@ -25,6 +25,7 @@ jobs:
         id: get_latest_tag
         run: |
           git fetch --tags
+          git pull
           latest_tag=$(git tag -l --sort=-v:refname | head -n 1)
           if [[ -z $latest_tag ]]; then
             latest_tag='v0.0.0'
