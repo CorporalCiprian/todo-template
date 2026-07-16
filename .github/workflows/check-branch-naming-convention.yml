@@ -6,9 +6,6 @@ on:
       branch:
         required: true
         type: string
-    outputs:
-      valid:
-        value: ${{ steps.branch_valid.outputs.validate }}
 
 jobs:
   check_naming_convention:
