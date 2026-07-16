@@ -25,8 +25,9 @@ jobs:
           BRANCH='${{inputs.branch}}'
           if [[ "$BRANCH" == feature/* ]]; then
             echo "bump=minor" >> "$GITHUB_OUTPUT"
-          else [[ "$BRANCH" == hotfix/* || "$BRANCH" == bugfix/* ]]; then
+          else
             echo "bump=patch" >> "$GITHUB_OUTPUT"
+          fi
         
       - name: get latest tag
         id: get_latest_tag
