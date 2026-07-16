@@ -1,0 +1,29 @@
+name: Build Node template
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        required: true
+        type: string
+    
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Node
+      uses: actions/setup-node@v3
+      with: 
+        node-version: '${{inputs.version}}'
+
+    - name: Install node dependencies
+      run: npm install
+
+    - name: Run node tests
+      run: npm test
+
+    - name: Run vite Build
+      run: npm run build

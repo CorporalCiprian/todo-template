@@ -1,0 +1,26 @@
+name: Build Python template
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        required: true
+        type: string
+    
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: '${{inputs.version}}'
+
+    - name: Install python dependencies
+      run: pip install -r requirements.txt
+
+    - name: Run python tests
+      run: pytest
