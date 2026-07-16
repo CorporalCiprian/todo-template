@@ -1,0 +1,37 @@
+name: Deploy Node
+on:
+  workflow_call:
+    inputs:
+      env: 
+        required: true
+        type: string
+      deploy:
+        required: true
+        type: boolean
+        default: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{inputs.env}}
+      deployment: ${{inputs.deploy}}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: get_pushed_tag
+        id: get_latest_tag
+        run: |
+          git fetch --tags --force
+          latest_tag=$(git tag -l --sort=-v:refname | head -n 1)
+          if [[ -z $latest_tag ]]; then
+            latest_tag='v0.0.0'
+          fi
+          echo "tag=$latest_tag" >> "$GITHUB_OUTPUT"
+      
+      - name: deploy
+        run: |
+          echo "Deploying to version: ${{steps.get_latest_tag.outputs.tag}}"
