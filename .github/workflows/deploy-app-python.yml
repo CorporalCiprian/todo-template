@@ -9,10 +9,6 @@ on:
         required: true
         type: boolean
         default: false
-    paths:
-      - '*.py'
-      - 'requirements.txt'
-      - '*.db'
 
 jobs:
   deploy:
