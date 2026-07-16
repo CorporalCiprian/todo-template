@@ -6,10 +6,6 @@ on:
       version:
         required: true
         type: string
-    paths:
-      - '*.py'
-      - '*.db'
-      - 'requirements.txt'
     
 jobs:
   build_and_test:
