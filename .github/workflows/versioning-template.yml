@@ -25,12 +25,8 @@ jobs:
           BRANCH='${{inputs.branch}}'
           if [[ "$BRANCH" == feature/* ]]; then
             echo "bump=minor" >> "$GITHUB_OUTPUT"
-          elif [[ "$BRANCH" == hotfix/* || "$BRANCH" == bugfix/* ]]; then
+          else [[ "$BRANCH" == hotfix/* || "$BRANCH" == bugfix/* ]]; then
             echo "bump=patch" >> "$GITHUB_OUTPUT"
-          else
-            echo "error: branch doesn't respect naming convention"
-            exit 1
-          fi
         
       - name: get latest tag
         id: get_latest_tag

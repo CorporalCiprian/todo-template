@@ -1,0 +1,22 @@
+name: Check branch naming convention
+
+on:
+  workflow_call:
+    inputs:
+      branch:
+        required: true
+        type: string
+    outputs:
+      valid:
+        value: ${{ steps.branch_valid.outputs.validate }}
+
+jobs:
+  check_naming_convention:
+    runs-on: ubuntu-latest
+    steps:
+      - name: validation
+        id: branch_valid
+        run: |
+          BRANCH='${{ inputs.branch }}'
+          if ! [[ "$BRANCH" == feature/* || "$BRANCH" == hotfix/* || "$BRANCH" == bugfix/* ]]; then
+            exit 1
