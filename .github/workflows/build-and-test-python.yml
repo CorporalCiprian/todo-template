@@ -8,12 +8,8 @@ on:
         type: string
     
 jobs:
-  validation:
-    uses: CorporalCiprian/todo-template/.github/workflows/check-branch-naming-convention.yml@main
-
   build_and_test:
     runs-on: ubuntu-latest
-    needs: validation
     steps:
     - uses: actions/checkout@v4
 
