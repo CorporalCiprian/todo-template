@@ -32,3 +32,9 @@ jobs:
           name: plan.tfplan
           path: plan.tfplan
           retention-days: 1
+      
+      - name: Print job summary
+        uses: sgametrio/terraform-summary-action@main
+        with:
+          log-file: plan.txt
+          title: Plan Summary
