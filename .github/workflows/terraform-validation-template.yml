@@ -34,7 +34,7 @@ jobs:
           retention-days: 1
       
       - name: Print job summary
-        uses: sgametrio/terraform-summary-action@main
+        uses: sgametrio/terraform-summary-action@v2
         with:
           log-file: plan.txt
           title: Plan Summary
