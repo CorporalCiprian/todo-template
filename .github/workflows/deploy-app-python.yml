@@ -62,7 +62,7 @@ jobs:
         with:
           app-name: func-todo-backend
           package: deployment.zip
-          publish_profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
+          publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
 
 
       
