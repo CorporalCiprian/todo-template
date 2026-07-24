@@ -35,3 +35,8 @@ jobs:
       - name: deploy
         run: |
           echo "Deploying to version: ${{steps.get_latest_tag.outputs.tag}}"
+
+      - name: artifact zip
+        run: zip -r deployment.zip . -x "*.git*" "*__pycache__*" "*.venv*" "*venv*" "*local.settings.json*" "tests/*" "*.md" "test.db" "Dockerfile"
+
+      
