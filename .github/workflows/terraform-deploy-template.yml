@@ -11,6 +11,9 @@ on:
 jobs:
   plan:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./terraform
     steps:
       - name: checkout
         uses: actions/checkout@v4
@@ -39,6 +42,9 @@ jobs:
     needs: plan
     name: Terraform init + apply
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./terraform
     environment: ${{ inputs.env }}
     steps:
       - name: checkout
