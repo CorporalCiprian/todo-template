@@ -9,6 +9,9 @@ on:
         required: true
         type: boolean
         default: false
+    secrets:
+      AZURE_CREDENTIALS: 
+        required: true
   
 jobs:
   deploy:
