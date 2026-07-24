@@ -39,5 +39,5 @@ jobs:
       - name: Print job summary
         uses: sgametrio/terraform-summary-action@v1.1
         with:
-          log-file: plan.txt
+          log-file: ./terraform/plan.txt
           title: Plan Summary
