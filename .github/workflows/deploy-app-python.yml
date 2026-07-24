@@ -37,6 +37,14 @@ jobs:
           echo "Deploying to version: ${{steps.get_latest_tag.outputs.tag}}"
 
       - name: artifact zip
-        run: zip -r deployment.zip . -x "*.git*" "*__pycache__*" "*.venv*" "*venv*" "*local.settings.json*" "tests/*" "*.md" "test.db" "Dockerfile"
+        run: zip deployment.zip function_app.py main.py database.py host.json requirements.txt
+
+      - name: Upload zip Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: deployment.zip
+          path: deployment.zip
+          retention-days: 1
+
 
       
