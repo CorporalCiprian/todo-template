@@ -41,8 +41,11 @@ jobs:
         run: |
           echo "Deploying to version: ${{steps.get_latest_tag.outputs.tag}}"
 
+      - name: Install dependencies
+        run:  pip install --target=".python_packages/lib/site-packages" -r requirements.txt
+
       - name: artifact zip
-        run: zip deployment.zip function_app.py main.py database.py host.json requirements.txt
+        run: zip deployment.zip function_app.py main.py database.py host.json requirements.txt .python_packages/
 
       - name: Upload zip Artifact
         uses: actions/upload-artifact@v4
