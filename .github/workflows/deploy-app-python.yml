@@ -45,7 +45,7 @@ jobs:
         run:  pip install --target=".python_packages/lib/site-packages" -r requirements.txt
 
       - name: artifact zip
-        run: zip -r deployment.zip function_app.py main.py database.py host.json .python_packages/
+        run: zip -r deployment.zip function_app.py main.py database.py host.json requirements.txt .python_packages/
 
       - name: Upload zip Artifact
         uses: actions/upload-artifact@v4
