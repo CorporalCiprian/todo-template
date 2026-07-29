@@ -9,8 +9,18 @@ on:
         required: true
         type: boolean
         default: false
+    secrets:
+      AZURE_CREDENTIALS:
+        required: true
+      AZURE_FUNCTIONAPP_PUBLISH_PROFILE:
+        required: true
 
 jobs:
+  build_node:
+    runs-on: ubuntu-latest
+    uses: CorporalCiprian/todo-template/.github/workflows/build-and-test-node.yml@main
+    with: 
+      version: '24'
   deploy:
     runs-on: ubuntu-latest
     environment:
@@ -35,3 +45,27 @@ jobs:
       - name: deploy
         run: |
           echo "Deploying to version: ${{steps.get_latest_tag.outputs.tag}}"
+
+
+      - name: artifact zip
+        run: zip -r deployment.zip host.json /dist package.json /src/functions/serveReact.js
+
+      - name: Upload zip Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: deployment.zip
+          path: deployment.zip
+          retention-days: 1
+      
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: 'Run the Azure Functions action'
+        uses: Azure/functions-action@v1
+        id: deploy-to-function-app
+        with:
+          app-name: func-todo-frontend
+          package: deployment.zip
+          publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
