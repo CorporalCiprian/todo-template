@@ -76,11 +76,10 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: 'Run the Azure Functions action'
+      - name: Azure Functions Deploy
         uses: Azure/functions-action@v1
         id: deploy-to-function-app
         with:
           app-name: func-todo-frontend
           package: deployment.zip
-          respect-funcignore: false
           publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
