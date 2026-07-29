@@ -9,6 +9,9 @@ on:
         required: true
         type: boolean
         default: false
+      node-version:
+        type: string
+        default: '24'
     secrets:
       AZURE_CREDENTIALS:
         required: true
@@ -16,11 +19,6 @@ on:
         required: true
 
 jobs:
-  build_node:
-    runs-on: ubuntu-latest
-    uses: CorporalCiprian/todo-template/.github/workflows/build-and-test-node.yml@main
-    with: 
-      version: '24'
   deploy:
     runs-on: ubuntu-latest
     environment:
@@ -45,6 +43,20 @@ jobs:
       - name: deploy
         run: |
           echo "Deploying to version: ${{steps.get_latest_tag.outputs.tag}}"
+
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with: 
+          node-version: ${{ inputs.node-version }}
+
+      - name: Install node dependencies
+        run: npm install
+
+      - name: Run node tests
+        run: npm test
+
+      - name: Run vite Build
+        run: npm run build
 
 
       - name: artifact zip
