@@ -82,4 +82,5 @@ jobs:
         with:
           app-name: func-todo-frontend
           package: deployment.zip
+          respect-funcignore: false
           publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
