@@ -3,6 +3,10 @@ on:
     secrets:
       AZURE_CREDENTIALS:
         required: true
+    inputs:
+      env:
+        required: true
+        type: string
 
 jobs:
   plan:
