@@ -30,7 +30,7 @@ jobs:
         run: terraform init
 
       - name: Terraform plan
-        run: terraform plan -input=false | tee plan.txt 
+        run: terraform plan -input=false -var-file="${{inputs.env}}.tfvars" | tee plan.txt 
       
       - name: Print job summary
         uses: sgametrio/terraform-summary-action@v1.1
@@ -63,4 +63,4 @@ jobs:
         run: terraform init
 
       - name: Terraform apply
-        run: terraform apply -auto-approve
+        run: terraform apply -auto-approve -var-file="${{inputs.env}}.tfvars"

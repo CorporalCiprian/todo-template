@@ -3,6 +3,10 @@ on:
     secrets:
       AZURE_CREDENTIALS:
         required: true
+    inputs:
+      env:
+        required: true
+        type: string
 
 jobs:
   plan:
@@ -27,7 +31,7 @@ jobs:
         run: terraform init
 
       - name: Terraform plan
-        run: terraform plan -input=false -out "plan.tfplan" | tee plan.txt 
+        run: terraform plan -input=false -out "plan.tfplan" -var-file="${{inputs.env}}.tfvars" | tee plan.txt 
 
       - name: Upload Plan Artifact
         uses: actions/upload-artifact@v4
