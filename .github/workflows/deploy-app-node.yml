@@ -57,7 +57,7 @@ jobs:
 
       - name: Run vite Build
         env: 
-          VITE_API_URL: "https://func-todo-backend-${{inputs.env}}.azurewebsites.net"
+          VITE_API_URL: "https://func-app-todo-backend-${{inputs.env}}.azurewebsites.net"
         run: npm run build
 
 
