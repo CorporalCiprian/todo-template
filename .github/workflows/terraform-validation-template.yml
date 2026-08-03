@@ -31,7 +31,7 @@ jobs:
         run: terraform init
 
       - name: Terraform plan
-        run: terraform plan -input=false -out "plan.tfplan" -var-file="${{inputs.env}}.tfvars" | tee plan.txt 
+        run: terraform plan -input=false -out "plan.tfplan" -var-file=".terraform/environments/${{inputs.env}}.tfvars" | tee plan.txt 
 
       - name: Upload Plan Artifact
         uses: actions/upload-artifact@v4
