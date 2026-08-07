@@ -27,7 +27,7 @@ jobs:
         uses: hashicorp/setup-terraform@v4
 
       - name: Terraform init
-        run: terraform init
+        run: terraform init -backend-config="backends/${{inputs.env}}.hcl"
 
       - name: Terraform plan
         run: terraform plan -input=false -var-file="environments/${{inputs.env}}.tfvars" | tee plan.txt 
@@ -60,7 +60,7 @@ jobs:
         uses: hashicorp/setup-terraform@v4
 
       - name: Terraform init
-        run: terraform init
+        run: terraform init -backend-config="backends/${{inputs.env}}.hcl"
 
       - name: Terraform apply
         run: terraform apply -auto-approve -var-file="environments/${{inputs.env}}.tfvars"
