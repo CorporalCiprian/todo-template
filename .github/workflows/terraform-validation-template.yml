@@ -11,7 +11,7 @@ on:
 jobs:
   plan:
     name: Terraform init + plan
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./terraform
