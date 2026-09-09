@@ -5,10 +5,6 @@ on:
       env: 
         required: true
         type: string
-      deploy:
-        required: true
-        type: boolean
-        default: false
     secrets:
       AZURE_CREDENTIALS: 
         required: true
@@ -27,7 +23,6 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: ${{inputs.env}}
-      deployment: ${{inputs.deploy}}
     steps:
       - name: checkout
         uses: actions/checkout@v4
