@@ -12,6 +12,12 @@ on:
         required: true
       AZURE_REGISTRY_PASSWORD:
         required: true
+      AZURE_CLIENT_ID:
+        required: true
+      AZURE_SUBSCRIPTION_ID:
+        required: true
+      AZURE_TENANT_ID:
+        required: true
 env:
   AZURE_CONTAINER_REGISTRY: crtodo${{inputs.env}}     
   CONTAINER_APP_NAME: ca-backend-todo-${{inputs.env}}
@@ -56,7 +62,9 @@ jobs:
       - name: Azure login
         uses: azure/login@v2
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
 
       - name: Azure Container App Deploy
         uses: azure/container-apps-deploy-action@v1
