@@ -21,6 +21,8 @@ env:
   CONTAINER_APP_NAME: ca-backend-todo-${{inputs.env}}
   RESOURCE_GROUP: rg-containers-todo-${{inputs.env}}
   CONTAINER_APP_ENVIRONMENT: cae-todo-${{inputs.env}}
+permissions:
+  contents: write
   
 jobs:
   deploy:
