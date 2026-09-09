@@ -9,7 +9,7 @@ on:
 
 jobs:
   check_naming_convention:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - name: validation
         id: branch_valid

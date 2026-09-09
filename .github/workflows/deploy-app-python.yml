@@ -12,12 +12,19 @@ on:
     secrets:
       AZURE_CREDENTIALS: 
         required: true
-      AZURE_FUNCTIONAPP_PUBLISH_PROFILE:
+      AZURE_REGISTRY_USERNAME:
         required: true
+      AZURE_REGISTRY_PASSWORD:
+        required: true
+env:
+  AZURE_CONTAINER_REGISTRY: crtodo${{inputs.env}}     
+  CONTAINER_APP_NAME: ca-backend-todo-${{inputs.env}}
+  RESOURCE_GROUP: rg-containers-todo-${{inputs.env}}
+  CONTAINER_APP_ENVIRONMENT: cae-todo-${{inputs.env}}
   
 jobs:
   deploy:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     environment:
       name: ${{inputs.env}}
       deployment: ${{inputs.deploy}}
@@ -37,35 +44,34 @@ jobs:
           fi
           echo "tag=$latest_tag" >> "$GITHUB_OUTPUT"
       
-      - name: deploy
-        run: |
-          echo "Deploying to version: ${{steps.get_latest_tag.outputs.tag}}"
-
-      - name: Install dependencies
-        run:  pip install --target=".python_packages/lib/site-packages" -r requirements.txt
-
-      - name: artifact zip
-        run: zip -r deployment.zip function_app.py main.py database.py host.json requirements.txt .python_packages/
-
-      - name: Upload zip Artifact
-        uses: actions/upload-artifact@v4
+      - name: Login to ACR
+        uses: docker/login-action@v3
         with:
-          name: deployment.zip
-          path: deployment.zip
-          retention-days: 1
-      
+          registry: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io
+          username: ${{ secrets.AZURE_REGISTRY_USERNAME}}
+          password: ${{ secrets.AZURE_REGISTRY_PASSWORD }}
+
+      - name: Build and push to ACR
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          tags: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/backend:${{ steps.get_latest_tag.outputs.tag }}
+
       - name: Azure login
         uses: azure/login@v2
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Azure Functions Deploy
-        uses: Azure/functions-action@v1
-        id: deploy-to-function-app
+      - name: Azure Container App Deploy
+        uses: azure/container-apps-deploy-action@v1
         with:
-          app-name: func-todo-backend
-          package: deployment.zip
-          publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
+          imageToDeploy: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/backend:${{ steps.get_latest_tag.outputs.tag }}
+          acrUsername: ${{ secrets.AZURE_REGISTRY_USERNAME }}
+          acrPassword: ${{ secrets.AZURE_REGISTRY_PASSWORD }}
+          containerAppName: ${{ env.CONTAINER_APP_NAME }}
+          resourceGroup: ${{ env.RESOURCE_GROUP }}
+          containerAppEnvironment: ${{ env.CONTAINER_APP_ENVIRONMENT }}
+          
 
 
       
