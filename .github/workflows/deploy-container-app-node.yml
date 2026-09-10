@@ -5,9 +5,6 @@ on:
       env: 
         required: true
         type: string
-      node-version:
-        type: string
-        default: '24'
     secrets:
       AZURE_REGISTRY_USERNAME:
         required: true
