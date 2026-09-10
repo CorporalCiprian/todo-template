@@ -33,7 +33,6 @@ jobs:
     runs-on: self-hosted
     environment:
       name: ${{inputs.env}}
-      deployment: ${{inputs.deploy}}
     steps:
       - name: checkout
         uses: actions/checkout@v4
