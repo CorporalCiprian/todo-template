@@ -71,7 +71,7 @@ jobs:
         uses: azure/container-apps-deploy-action@v1
         with:
           imageToDeploy: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/backend:${{ steps.get_latest_tag.outputs.tag }}
-          acrName: ${{ secrets.AZURE_REGISTRY_USERNAME }}
+          acrName: ${{ env.AZURE_CONTAINER_REGISTRY }}
           acrUsername: ${{ secrets.AZURE_REGISTRY_USERNAME }}
           acrPassword: ${{ secrets.AZURE_REGISTRY_PASSWORD }}
           containerAppName: ${{ env.CONTAINER_APP_NAME }}
