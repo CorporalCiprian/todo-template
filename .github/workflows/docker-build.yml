@@ -2,9 +2,6 @@ name: Docker Build
 on:
   workflow_call:
     inputs:
-      env: 
-        required: true
-        type: string
       AZURE_CONTAINER_REGISTRY:
         required: true
         type: string
@@ -24,8 +21,6 @@ permissions:
 jobs:
   build:
     runs-on: self-hosted
-    environment:
-      name: ${{inputs.env}}
     steps:
       - name: checkout
         uses: actions/checkout@v4
