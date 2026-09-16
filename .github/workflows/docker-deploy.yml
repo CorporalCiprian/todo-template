@@ -1,0 +1,83 @@
+name: Deploy docker container
+on:
+  workflow_call:
+    inputs:
+      env: 
+        required: true
+        type: string
+      AZURE_CONTAINER_REGISTRY:
+        required: true
+        type: string     
+      CONTAINER_APP_NAME:
+        required: true
+        type: string
+      RESOURCE_GROUP:
+        required: true
+        type: string
+      CONTAINER_APP_ENVIRONMENT:
+        required: true
+        type: string
+      tag:
+        required: false
+        type: string
+        default: null
+    secrets:
+      AZURE_REGISTRY_USERNAME:
+        required: true
+      AZURE_REGISTRY_PASSWORD:
+        required: true
+      AZURE_CLIENT_ID:
+        required: true
+      AZURE_SUBSCRIPTION_ID:
+        required: true
+      AZURE_TENANT_ID:
+        required: true
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    environment:
+      name: ${{inputs.env}}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: get_pushed_tag
+        id: get_latest_tag
+        run: |
+          git fetch --tags --force
+          latest_tag=$(git tag -l --sort=-v:refname | head -n 1)
+          if [[ -z $latest_tag ]]; then
+            latest_tag='v0.0.0'
+          fi
+          if [[ ${{ inputs.tag }} != null ]]; then
+            latest_tag=${{ inputs.tag }}
+          fi
+          echo "tag=$latest_tag" >> "$GITHUB_OUTPUT"
+      
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+
+      - name: Azure Container App Deploy
+        uses: azure/container-apps-deploy-action@v1
+        with:
+          imageToDeploy: ${{ inputs.AZURE_CONTAINER_REGISTRY }}.azurecr.io/backend:${{ steps.get_latest_tag.outputs.tag }}
+          acrName: ${{ inputs.AZURE_CONTAINER_REGISTRY }}
+          acrUsername: ${{ secrets.AZURE_REGISTRY_USERNAME }}
+          acrPassword: ${{ secrets.AZURE_REGISTRY_PASSWORD }}
+          containerAppName: ${{ inputs.CONTAINER_APP_NAME }}
+          resourceGroup: ${{ inputs.RESOURCE_GROUP }}
+          containerAppEnvironment: ${{ inputs.CONTAINER_APP_ENVIRONMENT }}
+          
+
+
+      
