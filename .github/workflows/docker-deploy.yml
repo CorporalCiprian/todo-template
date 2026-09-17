@@ -21,6 +21,10 @@ on:
         required: false
         type: string
         default: null
+      targetPort:
+        required: false
+        type: number
+        default: 80
     secrets:
       AZURE_REGISTRY_USERNAME:
         required: true
@@ -77,6 +81,7 @@ jobs:
           containerAppName: ${{ inputs.CONTAINER_APP_NAME }}
           resourceGroup: ${{ inputs.RESOURCE_GROUP }}
           containerAppEnvironment: ${{ inputs.CONTAINER_APP_ENVIRONMENT }}
+          targetPort: ${{ inputs.targetPort }}
           
 
 
