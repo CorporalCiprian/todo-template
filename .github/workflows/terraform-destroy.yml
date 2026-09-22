@@ -1,0 +1,39 @@
+on:
+    workflow_call:
+        secrets:
+            AZURE_CLIENT_ID:
+                required: true
+            AZURE_SUBSCRIPTION_ID:
+                required: true
+            AZURE_TENANT_ID:
+                required: true
+        inputs:
+            env:
+                required: true
+                type: string
+
+jobs:
+    destroy:
+        runs-on: ubuntu-latest
+        defaults:
+            run:
+                working-directory: ./terraform
+        steps:
+            - name: checkout
+              uses: actions/checkout@v4
+
+            - name: Azure login
+              uses: azure/login@v2
+              with:
+                client-id: ${{ secrets.AZURE_CLIENT_ID }}
+                subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+                tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+
+            - name: Terraform setup
+              uses: hashicorp/setup-terraform@v4
+
+            - name: Terraform init
+              run: terraform init -backend-config="backends/${{inputs.env}}.hcl" -upgrade
+
+            - name: Terraform destroy
+              run: terraform destroy -auto-approve -var-file="environments/${{inputs.env}}.tfvars"
