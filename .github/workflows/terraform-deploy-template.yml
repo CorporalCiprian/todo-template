@@ -40,7 +40,7 @@ jobs:
       - name: Terraform plan
         id: plan_output
         run: | 
-          terraform plan -input=false -var-file="environments/${{inputs.env}}.tfvars" -detailed-exitcode
+          terraform plan -detailed-exitcode -input=false -var-file="environments/${{inputs.env}}.tfvars" 
           exit_code=$?
           echo "$exit_code"
           if [[ $exit_code == 0 ]]; then
