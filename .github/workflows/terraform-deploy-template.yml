@@ -15,6 +15,8 @@ on:
 jobs:
   plan:
     runs-on: ubuntu-latest
+    outputs:
+      plan_diff: ${{ steps.plan_output.outputs.plan_diff }}
     defaults:
       run:
         working-directory: ./terraform
@@ -36,7 +38,15 @@ jobs:
         run: terraform init -backend-config="backends/${{inputs.env}}.hcl" -upgrade
 
       - name: Terraform plan
-        run: terraform plan -input=false -var-file="environments/${{inputs.env}}.tfvars" | tee plan.txt 
+        id: plan_output
+        run: | 
+          terraform plan -input=false -var-file="environments/${{inputs.env}}.tfvars" -detailed-exitcode
+          exit_code=$?
+          tee plan.txt
+          if [[ exit_code == 0 ]]; then
+            echo "plan_diff=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "plan_diff=true" >> "GITHUB_OUTPUT" 
       
       - name: Print job summary
         uses: sgametrio/terraform-summary-action@v1.1
@@ -46,6 +56,7 @@ jobs:
 
   apply:
     needs: plan
+    if: ${{ needs.plan.outputs.plan_diff == true }}
     name: Terraform init + apply
     runs-on: ubuntu-latest
     defaults:
