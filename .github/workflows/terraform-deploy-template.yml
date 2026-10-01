@@ -33,6 +33,8 @@ jobs:
 
       - name: Terraform setup
         uses: hashicorp/setup-terraform@v4
+        with:
+          terraform_wrapper: false
 
       - name: Terraform init
         run: terraform init -backend-config="backends/${{inputs.env}}.hcl" -upgrade
@@ -42,7 +44,7 @@ jobs:
         run: | 
           set +e
           terraform plan -detailed-exitcode -input=false -var-file="environments/${{inputs.env}}.tfvars" 
-          exit_code=${PIPESTATUS[0]}
+          exit_code=$?
           set -e
           echo "$exit_code"
           if [[ $exit_code == 0 ]]; then
