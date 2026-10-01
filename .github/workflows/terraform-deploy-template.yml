@@ -42,7 +42,7 @@ jobs:
         run: | 
           set +e
           terraform plan -detailed-exitcode -input=false -var-file="environments/${{inputs.env}}.tfvars" 
-          exit_code=$?
+          exit_code=${PIPESTATUS[0]}
           set -e
           echo "$exit_code"
           if [[ $exit_code == 0 ]]; then
