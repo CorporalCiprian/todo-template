@@ -55,12 +55,6 @@ jobs:
             echo "plan error"
             exit 1
           fi 
-
-  test:
-    runs-on: ubuntu-latest
-    needs: plan
-    steps:
-      - run: echo "${{ needs.plan.outputs.plan_diff }}"
     
   apply:
     needs: plan
