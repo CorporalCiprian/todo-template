@@ -42,7 +42,7 @@ jobs:
         run: | 
           terraform plan -input=false -var-file="environments/${{inputs.env}}.tfvars" -detailed-exitcode
           exit_code=$?
-          if [[ $exit_code -eq 0 ]]; then
+          if [[ $exit_code == 0 ]]; then
             echo "plan_diff=false" >> "$GITHUB_OUTPUT"
           else
             echo "plan_diff=true" >> "GITHUB_OUTPUT"
