@@ -41,11 +41,11 @@ jobs:
         id: plan_output
         run: | 
           terraform plan -input=false -var-file="environments/${{inputs.env}}.tfvars" -detailed-exitcode
-          EXIT_CODE=${PIPESTATUS[0]}
-          if [[ $EXIT_CODE == 0 ]]; then
+          exit_code=$?
+          if [[ $exit_code == 0 ]]; then
             echo "plan_diff=false" >> "$GITHUB_OUTPUT"
           else
-            echo "plan_diff=true" >> "GITHUB_OUTPUT"
+            echo "plan_diff=true" >> "$GITHUB_OUTPUT"
           fi 
 
   test:
