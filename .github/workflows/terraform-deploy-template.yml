@@ -93,7 +93,7 @@ jobs:
       - name: Download plan
         uses: actions/download-artifact@v8
         with: 
-          name: tfplan
+          path: terraform/tfplan
 
       - name: Terraform apply
         run: terraform apply -auto-approve -var-file="environments/${{inputs.env}}.tfvars" tfplan
