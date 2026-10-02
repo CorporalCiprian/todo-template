@@ -43,7 +43,7 @@ jobs:
         id: plan_output
         run: | 
           set +e
-          terraform plan -detailed-exitcode -input=false -var-file="environments/${{inputs.env}}.tfvars" 
+          terraform plan -detailed-exitcode -input=false -var-file="environments/${{inputs.env}}.tfvars" -out=tfplan
           exit_code=$?
           set -e
           echo "$exit_code"
@@ -55,6 +55,13 @@ jobs:
             echo "plan error"
             exit 1
           fi 
+        
+      - name: Artifact plan
+        uses: actions/upload-artifact@v7
+        with:
+          path: tfplan.tfplan
+          archive: false 
+          retention-days: 1
     
   apply:
     needs: plan
@@ -83,5 +90,10 @@ jobs:
       - name: Terraform init
         run: terraform init -backend-config="backends/${{inputs.env}}.hcl"
 
+      - name: Download plan
+        uses: actions/download-artifact@v8
+        with: 
+          name: tfplan.tfplan
+
       - name: Terraform apply
-        run: terraform apply -auto-approve -var-file="environments/${{inputs.env}}.tfvars"
+        run: terraform apply -auto-approve -var-file="environments/${{inputs.env}}.tfvars" tfplan
