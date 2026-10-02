@@ -59,7 +59,7 @@ jobs:
       - name: Artifact plan
         uses: actions/upload-artifact@v7
         with:
-          path: tfplan.tfplan
+          path: tfplan
           archive: false 
           retention-days: 1
     
@@ -93,7 +93,7 @@ jobs:
       - name: Download plan
         uses: actions/download-artifact@v8
         with: 
-          name: tfplan.tfplan
+          name: tfplan
 
       - name: Terraform apply
         run: terraform apply -auto-approve -var-file="environments/${{inputs.env}}.tfvars" tfplan
