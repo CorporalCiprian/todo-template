@@ -59,8 +59,8 @@ jobs:
       - name: Artifact plan
         uses: actions/upload-artifact@v7
         with:
-          path: tfplan
-          archive: false 
+          name: terraform-plan
+          path: tfplan 
           retention-days: 1
     
   apply:
